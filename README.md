@@ -11,13 +11,13 @@ This repository demonstrates the basics of using WebAssembly (Wasm) with the Go 
 1. Ensure you have Go installed. You can download it from https://golang.org/dl/
 
 2. Create a new directory for your project and navigate into it:
-   ```
+   ```bash
    mkdir go-wasm-example
    cd go-wasm-example
    ```
 
 3. Initialize a new Go module:
-   ```
+   ```bash
    go mod init go-wasm-example
    ```
 
@@ -33,8 +33,11 @@ This repository demonstrates the basics of using WebAssembly (Wasm) with the Go 
    ```
 
 5. Compile the Go code to WebAssembly:
-   ```
+   ```bash
    GOOS=js GOARCH=wasm go build -o main.wasm
+   ```
+   ```bash
+   cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" ./
    ```
 
 6. Create an HTML file to load the Wasm module:
@@ -64,7 +67,7 @@ This repository demonstrates the basics of using WebAssembly (Wasm) with the Go 
    ```bash
    npm i -g http-server
    ```
-   ```
+   ```bash
    http-server -p 3000 -o
    ```
 
