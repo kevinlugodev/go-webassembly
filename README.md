@@ -25,10 +25,22 @@ This repository demonstrates the basics of using WebAssembly (Wasm) with the Go 
    ```go
     package main
 
-    import "fmt"
+    import (
+    	"syscall/js"
+    )
 
     func main() {
-    	fmt.Println("Hello, WebAssembly!")
+    	c := make(chan struct{}, 0)
+    	js.Global().Set("add", js.FuncOf(add))
+    	<-c
+    }
+
+    func add(this js.Value, args []js.Value) interface{}{
+    	sum := 0
+    	for _, value := range args {
+    		sum += value.Int()
+    	}
+    	return js.ValueOf(sum)
     }
    ```
 
@@ -42,7 +54,7 @@ This repository demonstrates the basics of using WebAssembly (Wasm) with the Go 
 
 6. Create an HTML file to load the Wasm module:
    ```html
-   <!DOCTYPE html>
+    <!DOCTYPE html>
     <html lang="en">
         <head>
         <meta charset="UTF-8">
@@ -53,12 +65,16 @@ This repository demonstrates the basics of using WebAssembly (Wasm) with the Go 
         <script>
             const go = new Go();
             WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then((result) => {
-				go.run(result.instance);
-			});
+                go.run(result.instance)
+            })
+
+            function calculate(...args) {
+                console.log(add.apply(null, args));
+            }
         </script>
     </head>
     <body>
-        <span>Hello, world!</span>
+        <button onclick="calculate(4, 5, 6, 99)">Calculate</button>
     </body>
     </html>
    ```
