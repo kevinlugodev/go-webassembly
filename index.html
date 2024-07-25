@@ -9,11 +9,15 @@
     <script>
         const go = new Go();
         WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then((result) => {
-				go.run(result.instance);
-			});
+            go.run(result.instance)
+        })
+
+        function calculate(...args) {
+            console.log(add.apply(null, args));
+        }
     </script>
 </head>
 <body>
-    <span>Hello, world!</span>
+    <button onclick="calculate(4, 5, 6, 99)">Calculate</button>
 </body>
 </html>
